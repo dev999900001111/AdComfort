@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTubeの広告音量を一定にする</title>
+</head>
+
+<body>
+    <style>
+        .frame {
+            width: 350px;
+            font-size: 20px;
+        }
+
+        .frame>div {
+            width: 100%;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .volume {
+            width: 1px;
+            flex-grow: 1;
+        }
+
+        .skip {
+            width: 20px;
+            height: 20px;
+        }
+
+        input,
+        label {
+            cursor: pointer;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        * {
+            user-select: none;
+        }
+    </style>
+    <!-- <button id="btn">test</button> -->
+    <div id="main" class="frame">
+        <!--         
+        <div id="title">YouTubeの広告音量を一定にする</div>
+        <div id="description">YouTubeの広告音量を一定にする</div>
+        -->
+        <div>
+            <label for="volume">音量</label>
+            <input type="range" id="volume" name="volume" min="0" max="100" value="50" class="volume">
+        </div>
+        <div>
+            <label for="volume">明るさ</label>
+            <input type="range" id="brightness" name="brightness" min="0" max="100" value="100" class="brightness">
+        </div>
+        <div>
+            <label for="skip">自動スキップ</label>
+            <input type="checkbox" id="skip" name="skip" value="skip" class="skip" checked>
+        </div>
+        <!--         
+        <div id="config"></div>
+        <button id="setConfigButton">設定</button>
+        <button id="getConfigButton">取得</button>
+        -->
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

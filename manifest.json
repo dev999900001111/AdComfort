@@ -1,0 +1,39 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube広告の音量と照度を一定にする",
+    "version": "1.0",
+    "description": "YouTube広告の音量と照度を一定にする",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "tabs",
+        "downloads",
+        "webRequest"
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
+        "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
+    },
+    "host_permissions": [
+        "https://www.youtube.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.youtube.com/*"
+            ],
+            "css": [],
+            "js": [
+                "content-script.js"
+            ]
+        }
+    ],
+    "action": {
+        "default_title": "ダウンロードボタンをクリックしてください。",
+        "default_popup": "popup.html"
+    }
+}
