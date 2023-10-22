@@ -1,26 +1,20 @@
 {
     "manifest_version": 3,
-    "name": "YouTube広告の音量と照度を一定にする",
+    "name": "AdComfort",
     "version": "1.0",
-    "description": "YouTube広告の音量と照度を一定にする",
-    "permissions": [
-        "activeTab",
-        "scripting",
-        "storage",
-        "tabs",
-        "downloads",
-        "webRequest"
-    ],
-    "content_security_policy": {
-        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
-        "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
+    "description": "AdComfort は、YouTubeの広告視聴体験を向上させるプラグインです。広告の音量や画面の明度を自動調整し、視聴中のストレスや不快感を軽減します。",
+    "icons": {
+        "16": "img/icon/icon-24-16.png",
+        "48": "img/icon/icon-24-48.png",
+        "128": "img/icon/icon-24-128.png"
     },
+    "permissions": [
+        "storage"
+    ],
+    "content_security_policy": {},
     "host_permissions": [
         "https://www.youtube.com/*"
     ],
-    "background": {
-        "service_worker": "background.js"
-    },
     "content_scripts": [
         {
             "matches": [
@@ -33,7 +27,7 @@
         }
     ],
     "action": {
-        "default_title": "ダウンロードボタンをクリックしてください。",
+        "default_title": "設定",
         "default_popup": "popup.html"
     }
 }

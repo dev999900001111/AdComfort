@@ -1,0 +1,39 @@
+{
+    "manifest_version": 3,
+    "name": "AdComfort",
+    "version": "1.0",
+    "description": "AdComfort は、YouTubeの広告視聴体験を向上させるプラグインです。広告の音量や画面の明度を自動調整し、視聴中のストレスや不快感を軽減します。",
+    "icons": {
+        "16": "img/icon/icon-24-16.png",
+        "48": "img/icon/icon-24-48.png",
+        "128": "img/icon/icon-24-128.png"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "content_security_policy": {},
+    "host_permissions": [
+        "https://www.youtube.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.youtube.com/*"
+            ],
+            "css": [],
+            "js": [
+                "content-script.js"
+            ]
+        }
+    ],
+    "action": {
+        "default_title": "設定",
+        "default_popup": "popup.html"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "73c6eb09-060b-4382-ba06-4da569cbcf54-dev999900001111@gmail.com",
+            "strict_min_version": "109.0"
+        }
+    }
+}

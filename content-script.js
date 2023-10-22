@@ -1,4 +1,4 @@
-console.log('contetscript');
+// console.log('contetscript');
 
 const state = { isMute: "init", isAds: false, volume: null, brightness: null };
 
@@ -34,7 +34,7 @@ function getState() {
 
     // 音量を取得する
     // TODO ここは上手く行ってないけどvideoが再作成されてるっぽくて結果上手くいっているので一旦放置
-    const vol = document.querySelector(`ytp-volume-panel`);
+    const vol = document.querySelector(`.ytp-volume-panel`);
     if (vol) {
         state.volume = vol.attributes[`aria-valuenow`];
     } else {
@@ -58,7 +58,7 @@ function setState(currState, newState) {
     // ミュート状態を設定する
     if (currState.isMute !== newState.isMute) {
         // ミュート状態が指定されたものと異なる場合のみ処理する
-        console.log(`${new Date().toLocaleString()} setMute=${newState.isMute}, curr=${currState.isMute}`,);
+        // console.log(`${new Date().toLocaleString()} setMute=${newState.isMute}, curr=${currState.isMute}`,);
         const mute = document.querySelector('.ytp-mute-button.ytp-button');
         if (mute) {
             // ミュート状態を反転する
@@ -71,10 +71,14 @@ function setState(currState, newState) {
     }
     // 音量を設定する
     const videoElem = document.querySelector('.video-stream.html5-main-video');
+    // console.log(`new volume=${newState.volume}, curr=${currState.volume}`);
     if (videoElem) {
         if (newState.volume === null) {
         } else {
-            videoElem.volume = Number(newState.volume) / 100;
+            if (currState.volume < newState.volume) {
+            } else {
+                videoElem.volume = Number(newState.volume) / 100;
+            }
         }
         if (newState.brightness === null) {
             videoElem.style.removeProperty('filter')
@@ -153,6 +157,8 @@ function pollSkip() {
         // ステータス変化なし
     }
 
+    // console.log(`${new Date().toLocaleString()} ${state.isAds} -> ${currState.isAds}`);
+    // console.log(`${new Date().toLocaleString()} ${JSON.stringify(state)} -> ${JSON.stringify(currState)}`);
     // 状態を更新する
     Object.assign(state, currState);
 
@@ -176,7 +182,7 @@ const callback = function (mutationsList, observer) {
             // console.log('子ノードが追加または削除されました。');
             pollSkip();
         } else if (mutation.type === 'attributes') {
-            console.log(`属性: ${mutation.attributeName} が変更されました。`);
+            // console.log(`属性: ${mutation.attributeName} が変更されました。`);
         }
     }
 };
@@ -199,8 +205,14 @@ const checkForNode = function () {
         setTimeout(checkForNode, 10);
     }
 };
-checkForNode();
+setTimeout(() => {
+    checkForNode();
+}, 0);
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     checkForNode();
+// });
 // document.querySelector('.ytp-chrome-bottom').classList.add('ytp-volume-slider-active')
 
-console.log(chrome.runtime.id);
-console.log(chrome.storage);
+// console.log(chrome.runtime.id);
+// console.log(chrome.storage);
