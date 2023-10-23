@@ -8,68 +8,170 @@
     <title>AdComfort</title>
 </head>
 
-<body>
+<body class="body">
     <style>
-        .frame {
+        .body {
             width: 350px;
+            max-height: 600px;
+            overflow-x: hidden;
+            overflow-y: scroll;
             font-size: 20px;
+            border-radius: 10px;
+            background: linear-gradient(150deg, #7A9DB2, #78B29F);
+            /* 淡い青から淡い緑へのグラデーション */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            /* より控えめな影 */
+            padding: 20px;
+            color: #333;
+            /* テキストの色をダークグレーに変更 */
+            font-family: Arial, sans-serif;
         }
 
-        .frame>div {
-            width: 100%;
-            display: flex;
-            justify-content: start;
-            align-items: center;
-            margin: 10px 0;
+        h2 {
+            margin-top: 0;
         }
 
-        .volume {
-            width: 1px;
-            flex-grow: 1;
-        }
-
-        .skip {
+        .mute input,
+        .skip input {
             width: 20px;
             height: 20px;
         }
 
         input,
-        label {
+        label,
+        a {
             cursor: pointer;
         }
 
-        label {
-            margin-right: 10px;
+        .frame .tr {
+            height: 38px;
+        }
+
+        .frame .tr th {
+            text-align: left;
+            width: 120px;
+        }
+
+        .frame .tr td {
+            width: 210px;
+        }
+
+        .frame .tr td input[type="range"] {
+            width: 100%;
+        }
+
+        .frame .tr td input[type="number"] {
+            font-size: 18px;
+            border: none;
+            border-bottom: 1px solid #000;
+            text-align: right;
+        }
+
+        .adsHistory {
+            width: 330px;
+            max-width: 330px;
+        }
+
+        .adsHistory div {
+            width: 100%;
+        }
+
+        .adsHistory div a {
+            width: 100%;
+            display: inline-block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        input[type="range"],
+        input[type="checkbox"] {
+            border: 2px solid #333;
+            color: #333;
+            border: 2px solid #2A8D6F;
+            color: #2A8D6F;
+            accent-color: #2A8D6F;
+            border: 2px solid #2A578D;
+            color: #2A578D;
+            accent-color: #2A578D;
+
+            border: 2px solid #B8A28A;
+            color: #B8A28A;
+            accent-color: #B8A28A;
         }
 
         * {
             user-select: none;
         }
+
+
+        .input-minimalistic {
+            border: 1px solid #D0E2C8;
+            /* 薄い緑 */
+            padding: 8px 12px;
+            border-radius: 5px;
+            background-color: white;
+            color: #333;
+            /* ダークグレー */
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-minimalistic::placeholder {
+            color: #777;
+            /* 中間のグレー */
+        }
+
+        .input-minimalistic:focus {
+            border-color: #2A8D6F;
+            /* 濃い緑 */
+        }
+
+        .clearHistory:hover {
+            color: #2A8D6F;
+            /* 濃い緑 */
+            cursor: pointer;
+        }
     </style>
-    <!-- <button id="btn">test</button> -->
-    <div id="main" class="frame">
-        <!--         
-        <div id="title">YouTubeの広告音量を一定にする</div>
-        <div id="description">YouTubeの広告音量を一定にする</div>
-        -->
-        <div>
-            <label for="volume">volume</label>
-            <input type="range" id="volume" name="volume" min="0" max="100" value="50" class="volume">
-        </div>
-        <div>
-            <label for="volume">brightness</label>
-            <input type="range" id="brightness" name="brightness" min="0" max="100" value="100" class="brightness">
-        </div>
-        <div>
-            <label for="skip">auto skip</label>
-            <input type="checkbox" id="skip" name="skip" value="skip" class="skip" checked>
-        </div>
-        <!--         
-        <div id="config"></div>
-        <button id="setConfigButton">設定</button>
-        <button id="getConfigButton">取得</button>
-        -->
-    </div>
+    <h2>AdComfort</h2>
+    <table class="frame">
+        <tbody>
+            <tr class="tr mute">
+                <th><label for="mute">Mute</label></th>
+                <td><input type="checkbox" id="mute" name="mute" value="mute" checked></td>
+            </tr>
+            <tr class="tr volume">
+                <th><label for="volume">Volume</label></th>
+                <td><input type="range" id="volume" name="volume" min="0" max="100" value="50"></td>
+            </tr>
+            <tr class="tr brightness">
+                <th><label for="brightness">Brightness</label></th>
+                <td><input type="range" id="brightness" name="brightness" min="0" max="100" value="100"></td>
+            </tr>
+            <tr class="tr adsHistorySize" style="display: none;">
+                <th><label for="historySize">Ads history</label></th>
+                <td>
+                    <span style="margin-right: 10px;">size</span>
+                    <input type="number" id="adsHistorySize" name="adsHistorySize" min="0" max="99999" value="10"
+                        class="input-minimalistic">
+                </td>
+            </tr>
+            <tr class="tr skip">
+                <th><label for="skip">Auto skip</label></th>
+                <td><input type="checkbox" id="skip" name="skip" value="skip" checked></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%;display: flex;justify-content: space-between;align-items: baseline;">
+                        <h3 style="margin: 20px 0 5px 0">Ads history</h3>
+                        <a id="clearHistory" class="clearHistory">clear</a>
+                    </div>
+                    <div id="adsHistory" class="adsHistory"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <script src="popup.js"></script>
 </body>
 
