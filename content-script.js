@@ -1,15 +1,19 @@
 // console.log('contetscript');
-
-const state = { mute: "init", isAds: false, volume: null, brightness: null };
-
-const normalState = { mute: false, volume: null, brightness: null };
-const adsConfig = {
-    mute: true,
+const defaultConfig = {
+    mute: false,
     skip: true,
     volume: 50,
     brightness: 80,
-    adsHistorySize: 10,
+    adsHistorySize: 5,
 };
+
+const state = { mute: false, isAds: false, volume: null, brightness: null };
+
+const normalState = { mute: false, volume: null, brightness: null };
+
+const adsConfig = {};
+Object.assign(adsConfig, defaultConfig);
+
 const adsHistory = [];
 
 
@@ -70,7 +74,7 @@ function setState(currState, newState) {
         const mute = document.querySelector('.ytp-mute-button.ytp-button');
         if (mute) {
             // ミュート状態を反転する
-            mute.click();
+            // mute.click();
         } else {
             // ミュートボタンが見つからなかった場合は何もしない
         }
@@ -182,9 +186,13 @@ function pollSkip() {
                             //     title: document.querySelector('.ytp-title-link')?.innerText
                             // });
                         }
-                        chrome.storage.sync.set({ config: adsConfig, data: { adsHistory } }, function () {
-                            // console.log('Value is set to ' + JSON.stringify(result.data));
-                        });
+                        try {
+                            chrome.storage.sync.set({ config: adsConfig, data: { adsHistory } }, function () {
+                                // console.log('Value is set to ' + JSON.stringify(result.data));
+                            });
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }, 0);
                 } catch (e) {
                     console.log(e);
@@ -280,13 +288,7 @@ const checkForNode = function () {
                 config: {},
                 data: {},
             };
-            const defaultConfig = {
-                mute: true,
-                skip: true,
-                volume: 50,
-                brightness: 80,
-                adsHistorySize: 5,
-            };
+
             if (result) {
                 if (result.config) {
                     if (result.config.mute === undefined) {

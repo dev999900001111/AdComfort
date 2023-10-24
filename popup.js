@@ -36,7 +36,7 @@ function openPluginMainTab() {
 // openPluginMainTab();
 
 const defaultConfig = {
-    mute: true,
+    mute: false,
     skip: true,
     volume: 50,
     brightness: 80,
@@ -70,7 +70,14 @@ function getConfig() {
             return;
         } else { }
         if (result && result.config) {
-            if (result.config.mute === undefined) { result.config.mute = defaultConfig.mute; }
+            // if (result.config.mute === undefined
+            //     || result.config.skip === undefined
+            //     || result.config.volume === undefined
+            //     || result.config.brightness === undefined
+            //     || result.config.adsHistorySize === undefined) {
+            //     alert(`blank config ${JSON.stringify(result.config)}`);
+            // }
+            if (result.config.mute === undefined) { result.config.mute = defaultConfig.mute; } else { }
             if (result.config.skip === undefined) { result.config.skip = defaultConfig.skip; } else { }
             if (result.config.volume === undefined) { result.config.volume = defaultConfig.volume; } else { }
             if (result.config.brightness === undefined) { result.config.brightness = defaultConfig.brightness; } else { }
@@ -84,6 +91,7 @@ function getConfig() {
             // document.getElementById('config').innerHTML = `Load: ${JSON.stringify(result.config)}`;
             // console.log('Value currently is ' + result.key);
         } else {
+            // alert('blank config');
             // console.log(`Value currently is not set`);
             // document.getElementById('volume').value = defaultConfig.volume;
             // document.getElementById('brightness').value = defaultConfig.brightness;
@@ -102,6 +110,7 @@ function getConfig() {
                 const child = document.createElement('div');
                 const childLink = document.createElement('a');
                 childLink.innerText = item.title;
+                childLink.title = item.title;
                 if (item.href) {
                     childLink.href = item.href;
                 } else {
@@ -143,17 +152,3 @@ document.addEventListener('DOMContentLoaded', function () {
     // document.getElementById('getConfigButton').addEventListener('click', getConfig);
     getConfig();
 });
-
-// chrome.storage.sync.get(['enabled'], function (result) {
-//     if (chrome.runtime.lastError) {
-//         console.error(chrome.runtime.lastError);
-//         return;
-//     }
-//     if (result) {
-//         console.log('Value currently is ' + result.key);
-//     } else { }
-// });
-// // 設定値を保存する
-// chrome.storage.sync.set({ key: value }, function () {
-//     console.log('Value is set to ' + value);
-// });
