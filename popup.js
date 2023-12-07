@@ -1,12 +1,12 @@
 console.log('popup');
 
-// 新しいタブを開き、専用ページを表示する
+// Open a new tab and display a dedicated page
 function openPluginMainTab() {
     const target = `chrome-extension://${chrome.runtime.id}/index.html`;
     let existsTab = null;
     // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.query({}, function (tabs) {
-        // 現在のタブがプラグインのコントローラーページであるかどうかを確認する
+        // Check if the current tab is the plugin's controller page
         for (var i = 0; i < tabs.length; i++) {
             console.log(tabs[i].url);
             if (tabs[i].url.includes(chrome.runtime.id)) {
@@ -18,21 +18,21 @@ function openPluginMainTab() {
         }
     });
     if (existsTab) {
-        // 既存の場合は、そのタブをアクティブにする
+        // If it already exists, activate that tab
         existsTab.active();
     } else {
-        // 無かったら新規に開く
+        // Open a new one if it doesn't exist
         new Promise((resolve) => {
             chrome.tabs.create({ url: `chrome-extension://${chrome.runtime.id}/controller/index.html` }, resolve);
         }).then((tab) => {
-            // 新しいタブが正常に開かれた場合の処理
+            // Processing when a new tab is successfully opened
         }).catch((error) => {
-            // エラーが発生した場合の処理
+            // Processing when an error occurs
         });
     }
 }
 
-// 有効にする場合は、コメントを外す
+// Uncomment to enable
 // openPluginMainTab();
 
 const defaultConfig = {
@@ -99,14 +99,14 @@ function getConfig() {
         }
         if (result && result.data) {
             result.data.adsHistory = result.data.adsHistory || [];
-            const parent = document.getElementById('adsHistory')   // 親ノードを取得
-            while (parent.firstChild) {    // 子ノードがあるかぎり削除
+            const parent = document.getElementById('adsHistory')   // Get the parent node
+            while (parent.firstChild) {    // Delete as long as there are child nodes
                 parent.removeChild(parent.firstChild);
             }
-            // 逆ループ
+            // Reverse loop
             for (let i = result.data.adsHistory.length - 1; i >= 0; i--) {
                 const item = result.data.adsHistory[i];
-                // 子ノードをリンクとして追加
+                // Add child node as a link
                 const child = document.createElement('div');
                 const childLink = document.createElement('a');
                 childLink.innerText = item.title;

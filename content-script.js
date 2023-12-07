@@ -15,7 +15,7 @@ Object.assign(adsConfig, defaultConfig);
 
 const adsHistory = [];
 
-// 状態を取得する
+// Get the state
 function getState() {
     const state = {
         isAds: false,
@@ -25,61 +25,61 @@ function getState() {
         isUnskipableButton: false,
     };
 
-    // ミュート状態を取得する
+    // Get the mute state
     const mute = document.querySelector('.ytp-mute-button.ytp-button');
     if (mute) {
         const muteTitle = mute.attributes['data-title-no-tooltip'].value;
-        if (muteTitle === 'ミュート（消音）') {
-            // ミュート解除中だったらミュートする
+        if (muteTitle === 'Mute') {
+            // If it was in unmuted state, mute it.
             state.mute = false;
-        } else if (muteTitle === 'ミュート解除') {
-            // ミュート中だったらそのまま
+        } else if (muteTitle === 'Unmute') {
+            // If muted, leave as is
             state.mute = true;
         } else {
-            // どちらでもない場合は何もしない
+            // If it is neither of the two cases, do nothing
         }
     } else {
-        // ミュートボタンが見つからなかった場合は何もしない
+        // If the mute button is not found, do nothing
     }
 
-    // 音量を取得する
-    // TODO ここは上手く行ってないけどvideoが再作成されてるっぽくて結果上手くいっているので一旦放置
+    // Get the volume
+    // TODO This part is not working well, but it seems that the video is being recreated and the result is successful, so let's leave it for now.
     const vol = document.querySelector(`.ytp-volume-panel`);
     if (vol && vol.attributes[`aria-valuenow`]) {
         state.volume = vol.attributes[`aria-valuenow`].value;
     } else {
-        // 音量ボタンが見つからなかった場合は何もしない
+        // If the volume button is not found, do nothing
     }
 
-    // スキップボタン待ち版
+    // Skip button waiting version
     const btn = document.querySelector('.ytp-ad-skip-button-container,[id="ad-text:m"]');
     state.isSkipableButton = btn && btn.style.display !== 'none';
-    // 強制待ち版
+    // Forced wait version
     const waitText = document.querySelector('.ytp-ad-preview-container>.ytp-ad-text,.ytp-ad-preview-container.countdown-next-to-thumbnail');
     state.isUnskipableButton = waitText && waitText.style.display !== 'none';
 
-    // 広告表示中かどうか判定
+    // Determine whether advertising is being displayed
     state.isAds = state.isSkipableButton || state.isUnskipableButton;
 
     return state;
 }
 
 function setState(currState, newState) {
-    // ミュート状態を設定する
+    // Set the mute state
     if (currState.mute !== newState.mute) {
-        // ミュート状態が指定されたものと異なる場合のみ処理する
+        // Process only if the mute state is different from the specified one
         // console.log(`${new Date().toLocaleString()} setMute=${newState.mute}, curr=${currState.mute}`,);
         const mute = document.querySelector('.ytp-mute-button.ytp-button');
         if (mute) {
-            // ミュート状態を反転する
+            // Toggle mute state
             // mute.click();
         } else {
-            // ミュートボタンが見つからなかった場合は何もしない
+            // If the mute button is not found, do nothing
         }
     } else {
-        // ミュート状態が変化しなかった場合は何もしない
+        // If the mute state does not change, do nothing
     }
-    // 音量を設定する
+    // Set the volume
     const videoElem = document.querySelector('.video-stream.html5-main-video');
     // console.log(`new volume=${newState.volume}, curr=${currState.volume}`);
     if (videoElem) {
@@ -96,49 +96,49 @@ function setState(currState, newState) {
             videoElem.style.filter = `brightness(${newState.brightness}%)`;
         }
     } else {
-        // 
+        //
     }
 }
 
-// 広告スキップボタンをポーリングする
+// Polling the skip ad button
 function pollSkip() {
     const currState = getState();
     if (!state.isSkipableButton && currState.isSkipableButton) {
-        // スキップボタンが表示された
+        // Skip button is displayed
         if (adsConfig.skip) {
-            // スキップボタンを押す
+            // Press the skip button
             const btn = document.querySelector('.ytp-ad-skip-button-container,[id="ad-text:m"]');
             btn.click();
-            // 広告終了時
-            // 状態を元に戻す
+            // At the end of the advertisement
+            // Restore the state
             setState(currState, normalState);
         } else {
         }
         // adsHistory.push({
     }
-    // ステータス変化あり
+    // Status change exists
     if (state.isAds !== currState.isAds) {
-        // ステータス変化あり
+        // Status change exists
         if (currState.isAds) {
-            // 広告表示開始時
-            // 広告開始時の状態を取得
+            // At the start of displaying an advertisement
+            // Get the initial state when the advertisement starts
             normalState.volume = currState.volume;
             normalState.mute = currState.mute;
 
-            // 音量を設定する
+            // Set the volume
             setState(currState, {
                 mute: Number(adsConfig.volume) === 0 || adsConfig.mute,
                 volume: adsConfig.volume,
                 brightness: adsConfig.brightness,
             });
 
-            // 広告履歴を更新する
+            // Update advertising history
             while (adsHistory.length >= adsConfig.adsHistorySize) {
-                adsHistory.shift(); // キューが最大サイズに達していれば、先頭の要素を削除
+                adsHistory.shift(); // If the queue has reached its maximum size, remove the first element.
             }
-            // 右クリックイベントを発火させる関数
+            // Function to trigger right-click event
             function triggerRightClick(element) {
-                // MouseEventを生成
+                // Generate a MouseEvent
                 const event = new MouseEvent('contextmenu', {
                     bubbles: true,
                     cancelable: true,
@@ -148,35 +148,35 @@ function pollSkip() {
                     clientX: element.getBoundingClientRect().left,
                     clientY: element.getBoundingClientRect().top
                 });
-                // イベントを指定した要素にディスパッチ
+                // Dispatch an event to the specified element
                 element.dispatchEvent(event);
             }
-            // 例: idが"myElement"の要素上で右クリックイベントを発火
+            // Example: Trigger a right-click event on the element with the id "myElement"
             const elem = document.querySelector(".video-ads.ytp-ad-module");
             triggerRightClick(elem);
 
-            // クリックイベントの反応を待つ
+            // Wait for the click event response
             setTimeout(() => {
                 try {
-                    // 右クリックメニューを開く
+                    // Open right-click menu
                     document.querySelectorAll('.ytp-panel-menu .ytp-menuitem')[1].click();
                     setTimeout(() => {
                         const contextmenu = document.querySelector('.ytp-popup.ytp-contextmenu');
                         const splitted = contextmenu.innerText.split('\n');
                         // console.log(contextmenu.innerText);
                         if (splitted[splitted.length - 1].startsWith('https://')) {
-                            // 上手くリンクが取れたら新しい要素を追加
+                            // If the link is successfully obtained, add a new element
                             adsHistory.push({
                                 date: new Date().toLocaleString(),
                                 href: splitted[splitted.length - 1],
                                 title: document.querySelector('.ytp-title-link')?.innerText
                             });
                         } else {
-                            // // 上手くリンクが取れなかったら、動画IDを追加
+                            // If the link cannot be connected properly, add the video ID.
                             // adsHistory.push({
                             //     date: new Date().toLocaleString(),
-                            //     adVideoId: document.querySelector('.ytp-title-link')?.href?.split('watch?v=')[1],
-                            //     title: document.querySelector('.ytp-title-link')?.innerText
+                            // adVideoId: Get the href attribute of the element with class 'ytp-title-link', split it by 'watch?v=' and return the second element.
+                            // Get the inner text of the element with class 'ytp-title-link' if it exists.
                             // });
                         }
                         try {
@@ -192,15 +192,15 @@ function pollSkip() {
                 }
             }, 0);
         } else {
-            // 広告終了時
-            // 状態を元に戻す
+            // At the end of the advertisement
+            // Restore the state
             setState(currState, normalState);
         }
     } else {
-        // ステータス変化なし
+        // No change in status
     }
 
-    // 状態を更新する
+    // Update the state
     Object.assign(state, currState);
 
     // const interval = 100;
@@ -208,33 +208,33 @@ function pollSkip() {
 }
 // pollSkip();
 
-// オブザーバの設定
+// Setting up the observer
 const observerConfig = {
-    attributes: true,        // 属性の変更を監視
-    childList: true,         // 子ノードの変更を監視
-    characterData: true,     // テキスト内容の変更を監視
-    subtree: true            // 子孫ノードも監視
+    attributes: true,        // Monitor changes to properties
+    childList: true,         // Monitor changes to child nodes
+    characterData: true,     // Monitor changes in text content
+    subtree: true            // Also monitor descendant nodes
 };
 
-// コールバック関数を定義
+// Define a callback function
 const callback = function (mutationsList, observer) {
     for (let mutation of mutationsList) {
         if (mutation.type === 'childList') {
-            // console.log('子ノードが追加または削除されました。');
+            // console.log('A child node has been added or removed.');
             pollSkip();
         } else if (mutation.type === 'attributes') {
-            // console.log(`属性: ${mutation.attributeName} が変更されました。`);
+            // console.log(`Attribute: ${mutation.attributeName} has been changed.`);
         }
         // console.log(mutation);
     }
 };
 
-// ターゲットノードが存在するか確認する関数
+// Function to check if the target node exists
 const checkForNode = function () {
     const targetNode = document.querySelector('.video-ads.ytp-ad-module');
     if (targetNode && chrome.storage && chrome.storage.sync) {
 
-        // リアルタイムで設定を反映する
+        // Apply settings in real-time
         chrome.storage.onChanged.addListener(function (changes, namespace) {
             if (namespace === 'sync') {
                 for (let key in changes) {
@@ -242,15 +242,15 @@ const checkForNode = function () {
                     // console.log(`Storage key "${key}" in namespace "${namespace}" changed.`);
                     // console.log(`Old value was "${JSON.stringify(change.oldValue)}", new value is "${JSON.stringify(change.newValue)}".`);
 
-                    if (key === 'config') { // 設定を更新する
+                    if (key === 'config') { // Update settings
                         Object.assign(adsConfig, changes.config.newValue);
                         if (state.isAds) {
                             setState(state, adsConfig);
                             const currState = getState();
                             Object.assign(state, currState);
                         }
-                    } else if (key === 'data') { // 広告履歴を更新する
-                        // adsHistoryの内容を更新する
+                    } else if (key === 'data') { // Update advertising history
+                        // Update the contents of adsHistory
                         adsHistory.length = 0;
                         adsHistory.push(...changes.data.newValue.adsHistory);
                     } else {
@@ -260,21 +260,21 @@ const checkForNode = function () {
             } else { }
         });
 
-        // console.log('ターゲットノードが見つかりました。');
+        // console.log('Target node found.');
 
         const start = () => {
-            // MutationObserverをインスタンス化し、コールバックを渡す
+            // Instantiate MutationObserver and pass a callback
             const observer = new MutationObserver(callback);
 
             pollSkip();
 
-            // オブザーバを開始し、設定を適用
+            // Start the observer and apply the settings
             observer.observe(targetNode, observerConfig);
         }
 
-        // 設定を読み込む
+        // Read the settings
         chrome.storage.sync.get(['config', 'data'], function (result) {
-            // 保存してある情報を読み込む。なければデフォルト値を設定する
+            // Read the saved information. If it doesn't exist, set default values.
             const reset = {
                 config: {},
                 data: {},
@@ -314,7 +314,7 @@ const checkForNode = function () {
             }
         });
     } else {
-        // console.log('ターゲットノードが見つかりません。');
+        // console.log('Target node not found.');
         setTimeout(checkForNode, 1);
     }
 };
@@ -326,4 +326,3 @@ checkForNode();
 // document.querySelector('.ytp-chrome-bottom').classList.add('ytp-volume-slider-active')
 
 // console.log(chrome.runtime.id);
-// console.log(chrome.storage);
