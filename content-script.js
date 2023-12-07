@@ -1,4 +1,3 @@
-// console.log('contetscript');
 const defaultConfig = {
     mute: false,
     skip: true,
@@ -15,7 +14,6 @@ const adsConfig = {};
 Object.assign(adsConfig, defaultConfig);
 
 const adsHistory = [];
-
 
 // 状態を取得する
 function getState() {
@@ -101,11 +99,6 @@ function setState(currState, newState) {
         // 
     }
 }
-
-// const videoStream = document.querySelector('.video-stream');
-// videoStream.style.display = 'block';
-// const html5VideoContainer = document.querySelector('.html5-video-container');
-// html5VideoContainer.style.display = 'block'
 
 // 広告スキップボタンをポーリングする
 function pollSkip() {
@@ -207,8 +200,6 @@ function pollSkip() {
         // ステータス変化なし
     }
 
-    // console.log(`${new Date().toLocaleString()} ${state.isAds} -> ${currState.isAds}`);
-    // console.log(`${new Date().toLocaleString()} ${JSON.stringify(state)} -> ${JSON.stringify(currState)}`);
     // 状態を更新する
     Object.assign(state, currState);
 
@@ -291,31 +282,18 @@ const checkForNode = function () {
 
             if (result) {
                 if (result.config) {
-                    if (result.config.mute === undefined) {
-                        reset.config.mute = defaultConfig.mute;
-                    } else {
-                        reset.config.mute = result.config.mute;
+                    const key = ['mute', 'skip', 'volume', 'brightness', 'adsHistorySize',];
+                    for (let i = 0; i < key.length; i++) {
+                        const k = key[i];
+                        if (result.config[k] === undefined) {
+                            reset.config[k] = defaultConfig[k];
+                        } else {
+                            reset.config[k] = result.config[k];
+                        }
                     }
-                    if (result.config.skip === undefined) {
-                        reset.config.skip = defaultConfig.skip;
-                    } else {
-                        reset.config.skip = result.config.skip;
-                    }
-                    if (result.config.volume === undefined) {
-                        reset.config.volume = defaultConfig.volume;
-                    } else {
-                        reset.config.volume = Number(result.config.volume);
-                    }
-                    if (result.config.brightness === undefined) {
-                        reset.config.brightness = defaultConfig.brightness;
-                    } else {
-                        reset.config.brightness = Number(result.config.brightness);
-                    }
-                    if (result.config.adsHistorySize === undefined) {
-                        reset.config.adsHistorySize = defaultConfig.adsHistorySize;
-                    } else {
-                        reset.config.adsHistorySize = Number(result.config.adsHistorySize);
-                    }
+                    reset.config.volume = Number(reset.config.volume);
+                    reset.config.brightness = Number(reset.config.brightness);
+                    reset.config.adsHistorySize = Number(reset.config.adsHistorySize);
                 } else {
                     reset.config = defaultConfig;
                 }

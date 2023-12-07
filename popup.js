@@ -70,13 +70,13 @@ function getConfig() {
             return;
         } else { }
         if (result && result.config) {
-            // if (result.config.mute === undefined
-            //     || result.config.skip === undefined
-            //     || result.config.volume === undefined
-            //     || result.config.brightness === undefined
-            //     || result.config.adsHistorySize === undefined) {
-            //     alert(`blank config ${JSON.stringify(result.config)}`);
-            // }
+            if (result.config.mute === undefined
+                || result.config.skip === undefined
+                || result.config.volume === undefined
+                || result.config.brightness === undefined
+                || result.config.adsHistorySize === undefined) {
+                alert(`blank config ${JSON.stringify(result.config)}`);
+            }
             if (result.config.mute === undefined) { result.config.mute = defaultConfig.mute; } else { }
             if (result.config.skip === undefined) { result.config.skip = defaultConfig.skip; } else { }
             if (result.config.volume === undefined) { result.config.volume = defaultConfig.volume; } else { }

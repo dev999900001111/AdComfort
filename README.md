@@ -1,17 +1,18 @@
-### 名前
+# **AdComfort: YouTube Ad Viewer**
 
-**AdComfort: YouTube広告ビューワー**
+## Description
 
-### 説明文
+**AdComfort** is a plugin designed to enhance your YouTube ad viewing experience. It automatically adjusts the ad's volume and screen brightness to reduce stress and discomfort during viewing.
 
-**AdComfort**は、YouTubeの広告視聴体験を向上させるプラグインです。広告の音量や画面の明度を自動調整し、視聴中のストレスや不快感を軽減します。
+1. **Automatic Volume Adjustment**  
+   Prevents ads from suddenly playing at high volumes. The volume of the ads is automatically adjusted to a predefined level, allowing for a comfortable viewing experience.
 
-**特徴**
+2. **Automatic Brightness Adjustment**  
+   Prevents overly bright ads from causing discomfort to your eyes. The brightness of the videos is adjusted while the ad is being played, reducing glare and brightness.
 
-1. **音量の自動調整**  
-   広告が突然大音量で再生されるのを防ぎます。広告の音量は、ユーザーが事前に設定したレベルに自動調整され、快適な視聴が可能です。
+3. **Ad History Display**  
+   Keeps a history of the ads that have been displayed. **AdComfort** allows you to view the history of up to 5 ads, making it easy to revisit any ads you may have accidentally skipped.
 
-2. **明度の自動調整**  
-   明るすぎる広告が目に不快感をもたらすのを防ぎます。広告が再生される間だけ動画の明度を調整し、まぶしさを軽減します。
+Please enjoy a more comfortable and stress-free ad viewing experience on YouTube with **AdComfort**.
 
-**AdComfort**で、YouTubeの広告をより快適に、よりストレスフリーにご視聴ください。
+* Note: The functionality might become unstable if you are watching videos across multiple tabs.
